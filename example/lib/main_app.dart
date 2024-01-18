@@ -1,3 +1,4 @@
+import 'package:example/painter.dart';
 import 'package:fl_pip/fl_pip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_waya/flutter_waya.dart';
@@ -12,43 +13,54 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) => Scaffold(
-          body: Center(
-              child: Column(mainAxisSize: MainAxisSize.min, children: [
-        CountDown(
-            onChanged: (int i) {},
-            periodic: 1,
-            duration: const Duration(seconds: 500),
-            builder: (int i) => Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-                child: Text(i.toString()))),
-        PiPBuilder(builder: (PiPStatus status) {
-          switch (status) {
-            case PiPStatus.enabled:
-              return const Text('PiPStatus enabled');
-            case PiPStatus.disabled:
-              return builderDisabled;
-            case PiPStatus.unavailable:
-              return buildUnavailable;
-          }
-        }),
-        ElevatedButton(
-            onPressed: () async {
-              final state = await FlPiP().isAvailable;
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: state
-                        ? const Text('PiP available')
-                        : const Text('PiP unavailable')));
-              }
-            },
-            child: const Text('PiPStatus isAvailable')),
-        ElevatedButton(
-            onPressed: () {
-              FlPiP().toggle(AppState.background);
-            },
-            child: const Text('toggle')),
-      ])));
+      floatingActionButton: ElevatedButton(
+          onPressed: () {
+            FlPiP().enable(
+                ios: const FlPiPiOSConfig(
+                    path: 'assets/landscape.mp4', packageName: null),
+                android: const FlPiPAndroidConfig(
+                    aspectRatio: Rational.maxLandscape()));
+          },
+          child: const Text('Enable PiP')),
+      body: FlutterPainterExample()
+      // Center(
+      //     child: Column(mainAxisSize: MainAxisSize.min, children: [
+      //   CountDown(
+      //       onChanged: (int i) {},
+      //       periodic: 1,
+      //       duration: const Duration(seconds: 500),
+      //       builder: (int i) => Padding(
+      //           padding:
+      //               const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+      //           child: Text(i.toString()))),
+      //   PiPBuilder(builder: (PiPStatus status) {
+      //     switch (status) {
+      //       case PiPStatus.enabled:
+      //         return const Text('PiPStatus enabled');
+      //       case PiPStatus.disabled:
+      //         return builderDisabled;
+      //       case PiPStatus.unavailable:
+      //         return buildUnavailable;
+      //     }
+      //   }),
+      //   ElevatedButton(
+      //       onPressed: () async {
+      //         final state = await FlPiP().isAvailable;
+      //         if (context.mounted) {
+      //           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //               content: state
+      //                   ? const Text('PiP available')
+      //                   : const Text('PiP unavailable')));
+      //         }
+      //       },
+      //       child: const Text('PiPStatus isAvailable')),
+      //   ElevatedButton(
+      //       onPressed: () {
+      //         FlPiP().toggle(AppState.background);
+      //       },
+      //       child: const Text('toggle')),
+      // ]))
+      );
 
   Widget get builderDisabled =>
       Column(mainAxisSize: MainAxisSize.min, children: [
@@ -122,23 +134,29 @@ class PiPMainApp extends StatefulWidget {
 
 class _PiPMainAppState extends State<PiPMainApp> {
   @override
-  Widget build(BuildContext context) => Scaffold(
-      backgroundColor: Colors.white70,
-      body: Center(
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-        CountDown(
-            onChanged: (int i) {},
-            periodic: 1,
-            duration: const Duration(seconds: 500),
-            builder: (int i) => Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-                child: Text(i.toString()))),
-        const Text('The current pip is created using a new engine'),
-        const SizedBox(
-            height: 20,
-            width: double.infinity,
-            child: FlAnimationWave(
-                value: 0.5, color: Colors.red, direction: Axis.vertical)),
-      ])));
+  Widget build(BuildContext context) => FlutterPainterExample();
+  // Scaffold(
+  //       backgroundColor: Colors.white70,
+  //       body: Center(
+  //         child: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             CountDown(
+  //                 onChanged: (int i) {},
+  //                 periodic: 1,
+  //                 duration: const Duration(seconds: 500),
+  //                 builder: (int i) => Padding(
+  //                     padding: const EdgeInsets.symmetric(
+  //                         vertical: 6, horizontal: 12),
+  //                     child: Text(i.toString()))),
+  //             const Text('The current pip is created using a new engine'),
+  //             const SizedBox(
+  //                 height: 20,
+  //                 width: double.infinity,
+  //                 child: FlAnimationWave(
+  //                     value: 0.5, color: Colors.red, direction: Axis.vertical)),
+  //           ],
+  //         ),
+  //       ),
+  //     );
 }
