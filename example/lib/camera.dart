@@ -13,8 +13,10 @@ import 'package:video_player/video_player.dart';
 
 /// Camera example home widget.
 class CameraExampleHome extends StatefulWidget {
+  final List<CameraDescription> cameras;
+
   /// Default Constructor
-  const CameraExampleHome({super.key});
+  const CameraExampleHome({super.key, required this.cameras});
 
   @override
   State<CameraExampleHome> createState() {
@@ -158,11 +160,14 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
         _modeControlRowWidget(),
         Padding(
           padding: const EdgeInsets.all(5.0),
-          child: Row(
-            children: <Widget>[
-              _cameraTogglesRowWidget(),
-              _thumbnailWidget(),
-            ],
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: <Widget>[
+                _cameraTogglesRowWidget(),
+                _thumbnailWidget(),
+              ],
+            ),
           ),
         ),
       ],
@@ -224,41 +229,42 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
   Widget _thumbnailWidget() {
     final VideoPlayerController? localVideoController = videoController;
 
-    return Expanded(
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            if (localVideoController == null && imageFile == null)
-              Container()
-            else
-              SizedBox(
-                width: 64.0,
-                height: 64.0,
-                child: (localVideoController == null)
-                    ? (
-                        // The captured image on the web contains a network-accessible URL
-                        // pointing to a location within the browser. It may be displayed
-                        // either with Image.network or Image.memory after loading the image
-                        // bytes to memory.
-                        kIsWeb
-                            ? Image.network(imageFile!.path)
-                            : Image.file(File(imageFile!.path)))
-                    : Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.pink)),
-                        child: Center(
-                          child: AspectRatio(
-                              aspectRatio:
-                                  localVideoController.value.aspectRatio,
-                              child: VideoPlayer(localVideoController)),
-                        ),
+    return
+        // Expanded(
+        // child:
+        Align(
+      alignment: Alignment.centerRight,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          if (localVideoController == null && imageFile == null)
+            Container()
+          else
+            SizedBox(
+              width: 64.0,
+              height: 64.0,
+              child: (localVideoController == null)
+                  ? (
+                      // The captured image on the web contains a network-accessible URL
+                      // pointing to a location within the browser. It may be displayed
+                      // either with Image.network or Image.memory after loading the image
+                      // bytes to memory.
+                      kIsWeb
+                          ? Image.network(imageFile!.path)
+                          : Image.file(File(imageFile!.path)))
+                  : Container(
+                      decoration:
+                          BoxDecoration(border: Border.all(color: Colors.pink)),
+                      child: Center(
+                        child: AspectRatio(
+                            aspectRatio: localVideoController.value.aspectRatio,
+                            child: VideoPlayer(localVideoController)),
                       ),
-              ),
-          ],
-        ),
+                    ),
+            ),
+        ],
       ),
+      // ),
     );
   }
 
@@ -574,13 +580,13 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
       onNewCameraSelected(description);
     }
 
-    if (_cameras.isEmpty) {
+    if (widget.cameras.isEmpty) {
       SchedulerBinding.instance.addPostFrameCallback((_) async {
         showInSnackBar('No camera found.');
       });
       return const Text('None');
     } else {
-      for (final CameraDescription cameraDescription in _cameras) {
+      for (final CameraDescription cameraDescription in widget.cameras) {
         toggles.add(
           SizedBox(
             width: 90.0,
@@ -1034,27 +1040,27 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
 }
 
 /// CameraApp is the Main Application.
-class CameraApp extends StatelessWidget {
-  /// Default Constructor
-  const CameraApp({super.key});
+// class CameraApp extends StatelessWidget {
+//   /// Default Constructor
+//   const CameraApp({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: CameraExampleHome(),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return const MaterialApp(
+//       home: CameraExampleHome(),
+//     );
+//   }
+// }
 
-List<CameraDescription> _cameras = <CameraDescription>[];
+// List<CameraDescription> widget.cameras = <CameraDescription>[];
 
-Future<void> main() async {
-  // Fetch the available cameras before initializing the app.
-  try {
-    WidgetsFlutterBinding.ensureInitialized();
-    _cameras = await availableCameras();
-  } on CameraException catch (e) {
-    _logError(e.code, e.description);
-  }
-  runApp(const CameraApp());
-}
+// Future<void> main() async {
+//   // Fetch the available cameras before initializing the app.
+//   try {
+//     WidgetsFlutterBinding.ensureInitialized();
+//     widget.cameras = await availableCameras();
+//   } on CameraException catch (e) {
+//     _logError(e.code, e.description);
+//   }
+//   runApp(const CameraApp());
+// }

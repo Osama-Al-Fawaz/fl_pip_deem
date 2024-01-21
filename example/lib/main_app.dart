@@ -1,10 +1,11 @@
 import 'package:example/painter.dart';
 import 'package:fl_pip/fl_pip.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_waya/flutter_waya.dart';
+import 'package:camera_platform_interface/src/types/camera_description.dart';
 
 class MainApp extends StatefulWidget {
-  const MainApp({super.key});
+  final List<CameraDescription> cameras;
+  const MainApp({super.key, required this.cameras});
 
   @override
   State<MainApp> createState() => _MainAppState();
@@ -22,7 +23,9 @@ class _MainAppState extends State<MainApp> {
                     aspectRatio: Rational.maxLandscape()));
           },
           child: const Text('Enable PiP')),
-      body: FlutterPainterExample()
+      body: FlutterPainterExample(
+        cameras: widget.cameras,
+      )
       // Center(
       //     child: Column(mainAxisSize: MainAxisSize.min, children: [
       //   CountDown(
@@ -126,7 +129,8 @@ class _MainAppState extends State<MainApp> {
 }
 
 class PiPMainApp extends StatefulWidget {
-  const PiPMainApp({super.key});
+  final List<CameraDescription> cameras;
+  const PiPMainApp({super.key, required this.cameras});
 
   @override
   State<PiPMainApp> createState() => _PiPMainAppState();
@@ -134,7 +138,9 @@ class PiPMainApp extends StatefulWidget {
 
 class _PiPMainAppState extends State<PiPMainApp> {
   @override
-  Widget build(BuildContext context) => FlutterPainterExample();
+  Widget build(BuildContext context) => FlutterPainterExample(
+        cameras: widget.cameras,
+      );
   // Scaffold(
   //       backgroundColor: Colors.white70,
   //       body: Center(

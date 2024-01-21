@@ -10,9 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_painter_v2/flutter_painter.dart';
 // import 'package:flutter_painter/flutter_painter.dart';
 import 'dart:ui' as ui;
+import 'package:camera_platform_interface/src/types/camera_description.dart';
 
 class FlutterPainterExample extends StatefulWidget {
-  const FlutterPainterExample({Key? key}) : super(key: key);
+  final List<CameraDescription> cameras;
+  const FlutterPainterExample({Key? key, required this.cameras})
+      : super(key: key);
 
   @override
   _FlutterPainterExampleState createState() => _FlutterPainterExampleState();
@@ -201,14 +204,24 @@ class _FlutterPainterExampleState extends State<FlutterPainterExample> {
         ),
         body: Stack(
           children: [
-            Positioned.fill(
-                child: Center(
-              child:
-                  AspectRatio(aspectRatio: 21 / 9, child: CameraExampleHome()),
-            )),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: AspectRatio(
+                  //TODO: the video/file feed should be the child of this Widget and the aspect ratio of both the feed and the FlutterPainter below should be the same
+                  aspectRatio: 21 / 9,
+                  child: Container(color: Colors.blueAccent.withOpacity(0.5)),
+                ),
+              ),
+            ),
             if (backgroundImage != null)
               // Enforces constraints
-              Positioned.fill(
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
                 child: Center(
                   child: AspectRatio(
                     aspectRatio: 21 / 9,
@@ -242,6 +255,11 @@ class _FlutterPainterExampleState extends State<FlutterPainterExample> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
+                            AspectRatio(
+                                aspectRatio: 4 / 4,
+                                child: CameraExampleHome(
+                                  cameras: widget.cameras,
+                                )),
                             if (controller.freeStyleMode !=
                                 FreeStyleMode.none) ...[
                               const Divider(),

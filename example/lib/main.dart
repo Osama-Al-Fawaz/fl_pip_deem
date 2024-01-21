@@ -14,7 +14,9 @@ Future<void> main() async {
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(useMaterial3: true),
       darkTheme: ThemeData.dark(useMaterial3: true),
-      home: const MainApp()));
+      home: MainApp(
+        cameras: _cameras,
+      )));
 }
 
 /// mainName must be the same as the method name
@@ -26,7 +28,9 @@ void pipMain() {
         debugShowCheckedModeBanner: false,
         theme: ThemeData.light(useMaterial3: true),
         darkTheme: ThemeData.dark(useMaterial3: true),
-        home: const PiPMainApp()),
+        home: const PiPMainApp(
+          cameras: [],
+        )),
   ));
 }
 
