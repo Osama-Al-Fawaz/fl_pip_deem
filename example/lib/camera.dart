@@ -576,7 +576,10 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
       if (description == null) {
         return;
       }
-
+      print('this cameras lensDirection is: ${description.lensDirection}');
+      print('this cameras name is: ${description.name}');
+      print(
+          'this cameras sensorOrientation is: ${description.sensorOrientation}');
       onNewCameraSelected(description);
     }
 
